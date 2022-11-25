@@ -3,22 +3,15 @@ import StatusBarCustom from "../components/StatusBar";
 import React, { useContext } from "react";
 import { UsersContext } from "../store/context/user-context";
 import UserImage from "../components/UserImage";
-import Title from "../components/Title";
-import { COLORS, SIZES, FONTS } from "../constants/theme";
+import { COLORS } from "../constants/theme";
 import { CircleButton } from "../components/Button";
+import UserDetail from "../components/UserDetail";
 
 const Details = ({ route, navigation }) => {
   const usersCtx = useContext(UsersContext);
   const userId = route.params.userId;
   const selectedUser = usersCtx.users.find((user) => user.userId === userId);
   const { name, picture, location, gender, email, dob } = selectedUser;
-
-  const labelStyles = {
-    color: "#F3C5C5",
-    fontFamily: FONTS.semiBold,
-    fontSize: SIZES.medium,
-    style: styles.label,
-  };
 
   return (
     <View style={styles.container}>
@@ -37,54 +30,16 @@ const Details = ({ route, navigation }) => {
           height: "50%",
         }}
       />
-      <View style={styles.detailsContainer}>
-        <Title {...labelStyles}>First Name: </Title>
-        <Text style={{ paddingTop: 10, color: "white" }}>{name.first}</Text>
-      </View>
 
-      <View style={styles.detailsContainer}>
-        <Title {...labelStyles}>Last Name: </Title>
-        <Text style={{ paddingTop: 10, color: "white" }}>{name.last}</Text>
-      </View>
-
-      <View style={styles.detailsContainer}>
-        <Title {...labelStyles}>Gender: </Title>
-        <Text style={{ paddingTop: 10, color: "white" }}>{gender}</Text>
-      </View>
-
-      <View style={styles.detailsContainer}>
-        <Title {...labelStyles}>City: </Title>
-        <Text style={{ paddingTop: 10, color: "white" }}>{location.city}</Text>
-      </View>
-
-      <View style={styles.detailsContainer}>
-        <Title {...labelStyles}>State: </Title>
-        <Text style={{ paddingTop: 10, color: "white" }}>{location.state}</Text>
-      </View>
-
-      <View style={styles.detailsContainer}>
-        <Title {...labelStyles}>Country: </Title>
-        <Text style={{ paddingTop: 10, color: "white" }}>
-          {location.country}
-        </Text>
-      </View>
-
-      <View style={styles.detailsContainer}>
-        <Title {...labelStyles}>Email: </Title>
-        <Text style={{ paddingTop: 10, color: "white" }}>{email}</Text>
-      </View>
-
-      <View style={styles.detailsContainer}>
-        <Title {...labelStyles}>Date of Birth: </Title>
-        <Text style={{ paddingTop: 10, color: "white" }}>
-          {dob.date.slice(0, 10)}
-        </Text>
-      </View>
-
-      <View style={styles.detailsContainer}>
-        <Title {...labelStyles}>Age: </Title>
-        <Text style={{ paddingTop: 10, color: "white" }}>{dob.age}</Text>
-      </View>
+      <UserDetail label="First Name: ">{name.first}</UserDetail>
+      <UserDetail label="Last Name: ">{name.last}</UserDetail>
+      <UserDetail label="Gender: ">{gender}</UserDetail>
+      <UserDetail label="City: ">{location.city}</UserDetail>
+      <UserDetail label="State: ">{location.state}</UserDetail>
+      <UserDetail label="Country: ">{location.country}</UserDetail>
+      <UserDetail label="Email: ">{email}</UserDetail>
+      <UserDetail label="Date of Birth: ">{dob.date.slice(0, 10)}</UserDetail>
+      <UserDetail label="Age: ">{dob.age}</UserDetail>
     </View>
   );
 };
@@ -98,12 +53,5 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.primary,
     alignItems: "center",
     justifyContent: "center",
-  },
-  label: {
-    marginTop: 10,
-  },
-  detailsContainer: {
-    flexDirection: "row",
-    alignItems: "center",
   },
 });

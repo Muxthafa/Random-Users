@@ -6,12 +6,13 @@ import {
   SafeAreaView,
   ActivityIndicator,
 } from "react-native";
+import { UsersContext } from "../store/context/user-context";
 import React, { useEffect, useContext, useState } from "react";
-import { COLORS } from "../constants/theme";
 import StatusBarCustom from "../components/StatusBar";
 import UsersHeader from "../components/UsersHeader";
 import UserCard from "../components/UserCard";
-import { UsersContext } from "../store/context/user-context";
+import { COLORS } from "../constants/theme";
+import { userApi } from "../constants/api";
 
 export default function HomeScreen() {
   const usersCtx = useContext(UsersContext);
@@ -21,7 +22,7 @@ export default function HomeScreen() {
 
   const fetchUser = async () => {
     try {
-      const response = await fetch("https://randomuser.me/api/?results=3");
+      const response = await fetch(userApi);
       const result = await response.json();
       let userNames = result.results.map((item) => {
         const id = new Date().toString() + Math.random().toString();
