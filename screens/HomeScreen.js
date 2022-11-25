@@ -1,7 +1,13 @@
-import { StyleSheet, View, FlatList, SafeAreaView } from "react-native";
-import React, { useEffect, useContext } from "react";
+import {
+  StyleSheet,
+  View,
+  Text,
+  FlatList,
+  SafeAreaView,
+  ActivityIndicator,
+} from "react-native";
+import React, { useEffect, useContext, useState } from "react";
 import { COLORS } from "../constants/theme";
-
 import StatusBarCustom from "../components/StatusBar";
 import UsersHeader from "../components/UsersHeader";
 import UserCard from "../components/UserCard";
@@ -9,10 +15,12 @@ import { UsersContext } from "../store/context/user-context";
 
 export default function HomeScreen() {
   const usersCtx = useContext(UsersContext);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
   const usersData = usersCtx.users;
 
-  useEffect(() => {
-    async function fetchUser() {
+  const fetchUser = async () => {
+    try {
       const response = await fetch("https://randomuser.me/api/?results=3");
       const result = await response.json();
       let userNames = result.results.map((item) => {
@@ -20,9 +28,31 @@ export default function HomeScreen() {
         return { userId: id, ...item };
       });
       usersCtx.addUsers(userNames);
+      setLoading(false);
+    } catch (error) {
+      setError(true);
     }
+  };
+
+  useEffect(() => {
     fetchUser();
   }, []);
+
+  if (error) {
+    return (
+      <View style={styles.loadingIndicator}>
+        <Text>Something went wrong!</Text>
+      </View>
+    );
+  }
+
+  if (loading) {
+    return (
+      <View style={styles.loadingIndicator}>
+        <ActivityIndicator />
+      </View>
+    );
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -57,5 +87,10 @@ const styles = StyleSheet.create({
     right: 0,
     left: 0,
     zIndex: -1,
+  },
+  loadingIndicator: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
